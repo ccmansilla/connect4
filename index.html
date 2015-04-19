@@ -1,0 +1,88 @@
+<html>
+<head>
+<meta charset="utf-8" /> 
+<title>Connect4</title>
+<script>
+//creado por ccmansilla
+var mini4 = {
+	filas : 6,
+	columnas : 7,
+	tablero : [],
+	jugador : 'O',
+     
+	//crea el tablero vacio
+	inicio : function(){
+		this.tablero = new Array(this.filas-1); //arreglo de 0-5
+		for(var i=0; i<this.filas; i++){
+			this.tablero[i] = new Array(this.columnas-1); //arreglo de 0-6
+			for(var j=0; j<this.columnas; j++){
+				this.tablero[i][j] = '_'; //contenido: '_'=vacio, 'O'=ficha1, 'X'=ficha2
+			}
+		}
+		this.dibujar();
+		this.cambiarJugador();
+	},
+
+	dibujar : function(){
+		var div = document.getElementById('tablero');
+		var html = "<table border=1>";	
+		for(var i = this.filas-1; i>=0; i--){
+			html += "<tr>";
+			for(var j = this.columnas-1; j>=0; j--){
+				var contenido = this.tablero[i][j];
+                                html+= "<td onclick = mini4.ponerFicha("+j+")>"+contenido+"</td>";
+			}
+			html+= "</tr>"
+		}
+		html += "</table>";
+		div.innerHTML = html;
+	},
+
+	ponerFicha : function(columna){
+		for(var i=0; i<this.filas; i++){
+			if ((this.tablero[i][columna])=== '_'){
+			    this.tablero[i][columna]= this.jugador;
+			    break;	
+			}
+		}
+		
+		if(this.hayGanador === true){ //chequea si hay ganador
+			var div1 = document.getElementById('jugador');
+			var div2 = document.getElementById('tablero');
+			div1.innerHTML = "GANO JUGADOR: "+this.jugador;
+			div1.innerHTML = "";
+		}
+		else{
+                	this.dibujar();			
+	        	this.cambiarJugador();
+		}
+	},
+
+	cambiarJugador: function(){
+                var div = document.getElementById('jugador');
+		if(this.jugador === 'O'){
+			this.jugador = 'X';
+		}
+		else{
+			this.jugador = 'O';
+		}
+                div.innerHTML = "JUGADOR: "+this.jugador;
+	},
+
+	hayGanador: function(){
+		return false;
+	}
+};
+function reset(){
+	mini4.inicio();
+}
+</script>
+</head>
+<body onload='reset()'>
+<h1>Connect4</h1>
+<input type='button' onclick='reset()' value='reset'>
+<hr/>
+<div id = 'jugador'></div>
+<div id = 'tablero'></div>
+</body>
+</html>
