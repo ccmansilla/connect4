@@ -3,7 +3,6 @@
 <meta charset="utf-8" /> 
 <title>Connect4</title>
 <style>
-
 .tablero{
 	display: table;
 	border-collapse: collapse;
@@ -36,7 +35,7 @@ var mini4 = {
 	filas : 6,
 	columnas : 7,
 	tablero : [],
-	jugador : 'O',
+	jugador : 1,
      
 	//crea el tablero vacio
 	inicio : function(){
@@ -44,7 +43,7 @@ var mini4 = {
 		for(var i=0; i<this.filas; i++){
 			this.tablero[i] = new Array(this.columnas-1); //arreglo de 0-6
 			for(var j=0; j<this.columnas; j++){
-				this.tablero[i][j] = '_'; //contenido: '_'=vacio, 'O'=ficha1, 'X'=ficha2
+				this.tablero[i][j] = 0; //contenido: 0=vacio, 1=ficha1, 2=ficha2
 			}
 		}
 		this.dibujar();
@@ -60,16 +59,16 @@ var mini4 = {
 				var contenido = this.tablero[i][j];
 				var ficha = "";
 				switch(contenido){
-					case 'O':
+					case 1:
 						ficha="ficha1";
 						break;
-					case 'X':
+					case 2:
 						ficha="ficha2";
 						break;	
 					default:
 						ficha="vacio";
 				}
-                                html+= "<div onclick = mini4.ponerFicha("+j+") class='"+ficha+"' ></div>";
+                                html+= "<div onclick = 'mini4.ponerFicha("+j+")' class='"+ficha+"' ></div>";
 			}
 			html+= "</div>"
 		}
@@ -78,7 +77,7 @@ var mini4 = {
 
 	ponerFicha : function(columna){
 		for(var i=0; i<this.filas; i++){
-			if ((this.tablero[i][columna])=== '_'){
+			if ((this.tablero[i][columna])=== 0){
 			    this.tablero[i][columna]= this.jugador;
 			    break;	
 			}
@@ -91,12 +90,12 @@ var mini4 = {
 	cambiarJugador: function(){
                 var div = document.getElementById('jugador');
 		var ficha = "";
-		if(this.jugador === 'O'){
-			this.jugador = 'X';
+		if(this.jugador == 1){
+			this.jugador = 2;
 			ficha="ficha2";
 		}
 		else{
-			this.jugador = 'O';
+			this.jugador = 1;
 			ficha="ficha1";
 		}
 
