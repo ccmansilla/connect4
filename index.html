@@ -2,6 +2,34 @@
 <head>
 <meta charset="utf-8" /> 
 <title>Connect4</title>
+<style>
+
+.tablero{
+	display: table;
+	border-collapse: collapse;
+}
+
+.tablero div{
+	display: table-row;
+}
+
+.tablero div div{
+	display: table-cell;
+	width: 40px;
+	height: 40px;
+	border: 1px black solid;
+}
+
+div.vacio{
+	background-color: silver;	
+}
+div.ficha1{
+	background-color: blue;		
+}
+div.ficha2{
+	background-color: red;	
+}
+</style>
 <script>
 //creado por ccmansilla
 var mini4 = {
@@ -25,16 +53,26 @@ var mini4 = {
 
 	dibujar : function(){
 		var div = document.getElementById('tablero');
-		var html = "<table border=1>";	
+		var html = "";	
 		for(var i = this.filas-1; i>=0; i--){
-			html += "<tr>";
+			html += "<div>";
 			for(var j = this.columnas-1; j>=0; j--){
 				var contenido = this.tablero[i][j];
-                                html+= "<td onclick = mini4.ponerFicha("+j+")>"+contenido+"</td>";
+				var ficha = "";
+				switch(contenido){
+					case 'O':
+						ficha="ficha1";
+						break;
+					case 'X':
+						ficha="ficha2";
+						break;	
+					default:
+						ficha="vacio";
+				}
+                                html+= "<div onclick = mini4.ponerFicha("+j+") class='"+ficha+"' ></div>";
 			}
-			html+= "</tr>"
+			html+= "</div>"
 		}
-		html += "</table>";
 		div.innerHTML = html;
 	},
 
@@ -46,33 +84,27 @@ var mini4 = {
 			}
 		}
 		
-		if(this.hayGanador === true){ //chequea si hay ganador
-			var div1 = document.getElementById('jugador');
-			var div2 = document.getElementById('tablero');
-			div1.innerHTML = "GANO JUGADOR: "+this.jugador;
-			div1.innerHTML = "";
-		}
-		else{
-                	this.dibujar();			
-	        	this.cambiarJugador();
-		}
+               	this.dibujar();			
+	        this.cambiarJugador();
 	},
 
 	cambiarJugador: function(){
                 var div = document.getElementById('jugador');
+		var ficha = "";
 		if(this.jugador === 'O'){
 			this.jugador = 'X';
+			ficha="ficha2";
 		}
 		else{
 			this.jugador = 'O';
+			ficha="ficha1";
 		}
-                div.innerHTML = "JUGADOR: "+this.jugador;
-	},
 
-	hayGanador: function(){
-		return false;
+
+                div.innerHTML = "JUGADOR: <div 	style='width: 42px;height: 42px;' class='"+ficha+"'></div><br>";
 	}
 };
+
 function reset(){
 	mini4.inicio();
 }
@@ -83,6 +115,6 @@ function reset(){
 <input type='button' onclick='reset()' value='reset'>
 <hr/>
 <div id = 'jugador'></div>
-<div id = 'tablero'></div>
+<div id = 'tablero' class='tablero'></div>
 </body>
 </html>
