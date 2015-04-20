@@ -7,18 +7,15 @@
 	display: table;
 	border-collapse: collapse;
 }
-
 .tablero div{
 	display: table-row;
 }
-
 .tablero div div{
 	display: table-cell;
 	width: 40px;
 	height: 40px;
 	border: 1px black solid;
 }
-
 div.vacio{
 	background-color: silver;	
 }
@@ -32,13 +29,12 @@ div.ficha2{
 <script>
 //creado por ccmansilla
 var mini4 = {
-	filas : 6,
+	filas    : 6,
 	columnas : 7,
-	tablero : [],  // tablero de juego contiene las fichas: 0=vacio, 1=ficha1, 2=ficha2
-	ganador : 0,   // 0=nohay, 1=jugador1, 2=jugador2
-	jugador : 1,   // jugador que tiene el turno de jugar: 1=jugador1, 2=jugador2
-
-     
+	tablero  : [],  // tablero de juego contiene las fichas: 0=vacio, 1=ficha1, 2=ficha2
+	ganador  : 0,   // 0=nohay, 1=jugador1, 2=jugador2
+	jugador  : 1,   // jugador que tiene el turno de jugar: 1=jugador1, 2=jugador2
+  
 	//crea el tablero vacio
 	inicio : function(){
 		this.tablero = new Array(this.filas-1); //arreglo de 0-5
@@ -70,7 +66,7 @@ var mini4 = {
 					default:
 						ficha="vacio";
 				}
-                                html+= "<div onclick = 'mini4.ponerFicha("+j+")' class='"+ficha+"' ></div>";
+				html+= "<div onclick = 'mini4.ponerFicha("+j+")' class='"+ficha+"' ></div>";
 			}
 			html+= "</div>"
 		}
@@ -90,16 +86,16 @@ var mini4 = {
 	        	this.cambiarJugador();
 		}
 		else if(this.ganador == 1){
-			alert('ganador jugador 1');
+			alert('ganador jugador azul');
 		}
 		else{
-			alert('ganador jugador 2');
+			alert('ganador jugador rojo');
 		}
 			
 	},
 
 	cambiarJugador: function(){
-                var div = document.getElementById('jugador');
+        var div = document.getElementById('jugador');
 		var ficha = "";
 		if(this.jugador == 1){
 			this.jugador = 2;
@@ -109,17 +105,14 @@ var mini4 = {
 			this.jugador = 1;
 			ficha="ficha1";
 		}
-
-
-                div.innerHTML = "JUGADOR: <div 	style='width: 42px;height: 42px;' class='"+ficha+"'></div><br>";
+        div.innerHTML = "JUGADOR: <div 	style='width: 42px;height: 42px;' class='"+ficha+"'></div><br>";
 	},
 
 	hayGanador: function(){ //busca 4 fichas consecutivas en horizontal y vertical
 		var p1  = 0;
 		var p2  = 0;
-
 		this.ganador = 0;
-
+		
 		//recorrido horizontal
 		for(var i=0; i<this.filas && this.ganador == 0; i++){
 			for(var j=0; j<this.columnas; j++){
@@ -149,7 +142,6 @@ var mini4 = {
 		
 		p1  = 0;
 		p2  = 0;
-
 		//recorrido vertical
 		for(var j=0; j<this.columnas && this.ganador == 0; j++){
 			for(var i=0; i<this.filas; i++){
@@ -172,12 +164,11 @@ var mini4 = {
 				}
 				else{
 					p2=0
-				}
-			   
+				}  
 			}
 		}
-		
-		//recorrido diagonal
+		//recorrido diagonal a la derecha
+		//recorrido diagonal a la izquierda
 	}
 };
 
