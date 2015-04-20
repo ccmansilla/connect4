@@ -137,8 +137,7 @@ var mini4 = {
 				}
 				else{
 					p2=0
-				}
-			   
+				}   
 			}
 		}
 		
@@ -170,19 +169,60 @@ var mini4 = {
 			}
 		}		
 		//son 6 diagonales a la derecha
-		var dm2= [this.tablero[2][0],this.tablero[3][1],this.tablero[4][2],this.tablero[5][3]];
-		var dm1= [this.tablero[1][0],this.tablero[2][1],this.tablero[3][2],this.tablero[4][3],this.tablero[5][4]];
-		var d0 = [this.tablero[0][0],this.tablero[1][1],this.tablero[2][2],this.tablero[3][3],this.tablero[5][5]];
-		var dn1= [this.tablero[0][1],this.tablero[1][2],this.tablero[2][3],this.tablero[3][4],this.tablero[4][5],this.tablero[5][6]];
-		var dn2= [this.tablero[0][2],this.tablero[1][3],this.tablero[2][4],this.tablero[3][5],this.tablero[4][6]];
-		var dn3= [this.tablero[0][3],this.tablero[1][4],this.tablero[2][5],this.tablero[3][6]];
+		var d1 = [this.tablero[2][0],this.tablero[3][1],this.tablero[4][2],this.tablero[5][3]];
+		var d2 = [this.tablero[1][0],this.tablero[2][1],this.tablero[3][2],this.tablero[4][3],this.tablero[5][4]];
+		var d3 = [this.tablero[0][0],this.tablero[1][1],this.tablero[2][2],this.tablero[3][3],this.tablero[5][5]];
+		var d4 = [this.tablero[0][1],this.tablero[1][2],this.tablero[2][3],this.tablero[3][4],this.tablero[4][5],this.tablero[5][6]];
+		var d5 = [this.tablero[0][2],this.tablero[1][3],this.tablero[2][4],this.tablero[3][5],this.tablero[4][6]];
+		var d6 = [this.tablero[0][3],this.tablero[1][4],this.tablero[2][5],this.tablero[3][6]];
 		//son 6 diagonales a la izquierda
-		var in3= [this.tablero[0][3],this.tablero[1][2],this.tablero[2][1],this.tablero[3][0]];
-		var in4= [this.tablero[0][4],this.tablero[1][3],this.tablero[2][2],this.tablero[3][1],this.tablero[2][0]];
-		var in5= [this.tablero[0][5],this.tablero[1][4],this.tablero[2][3],this.tablero[3][2],this.tablero[4][1],this.tablero[5][0]];
-		var in6= [this.tablero[0][6],this.tablero[1][5],this.tablero[2][4],this.tablero[3][3],this.tablero[4][2],this.tablero[5][1]];
-		var ir5= [this.tablero[1][6],this.tablero[2][5],this.tablero[3][4],this.tablero[4][3],this.tablero[5][4]];
-		var ir4= [this.tablero[2][6],this.tablero[3][5],this.tablero[4][4],this.tablero[5][3]];
+		var i1 = [this.tablero[0][3],this.tablero[1][2],this.tablero[2][1],this.tablero[3][0]];
+		var i2 = [this.tablero[0][4],this.tablero[1][3],this.tablero[2][2],this.tablero[3][1],this.tablero[2][0]];
+		var i3 = [this.tablero[0][5],this.tablero[1][4],this.tablero[2][3],this.tablero[3][2],this.tablero[4][1],this.tablero[5][0]];
+		var i4 = [this.tablero[0][6],this.tablero[1][5],this.tablero[2][4],this.tablero[3][3],this.tablero[4][2],this.tablero[5][1]];
+		var i5 = [this.tablero[1][6],this.tablero[2][5],this.tablero[3][4],this.tablero[4][3],this.tablero[5][4]];
+		var i6 = [this.tablero[2][6],this.tablero[3][5],this.tablero[4][4],this.tablero[5][3]];
+        
+		if(this.ganador==0){ this.buscarGanadorDiagonal(d1) };
+		if(this.ganador==0){ this.buscarGanadorDiagonal(d2) };
+		if(this.ganador==0){ this.buscarGanadorDiagonal(d3) };
+		if(this.ganador==0){ this.buscarGanadorDiagonal(d4) };
+		if(this.ganador==0){ this.buscarGanadorDiagonal(d5) };
+		if(this.ganador==0){ this.buscarGanadorDiagonal(d6) };
+		
+		if(this.ganador==0){ this.buscarGanadorDiagonal(i1) };
+		if(this.ganador==0){ this.buscarGanadorDiagonal(i2) };
+		if(this.ganador==0){ this.buscarGanadorDiagonal(i3) };
+		if(this.ganador==0){ this.buscarGanadorDiagonal(i4) };
+		if(this.ganador==0){ this.buscarGanadorDiagonal(i5) };
+		if(this.ganador==0){ this.buscarGanadorDiagonal(i6) };
+	},
+	buscarGanadorDiagonal: function(d){
+		var p1  = 0;
+		var p2  = 0;
+		var longitud   = d.length;	
+		for(var i= 0; i<longitud; i++){
+				if(d[i]==1){
+					p1++;
+					if(p1==4){ //cuatro fichas1 consecutivas horizontales
+						this.ganador = 1;
+						break;
+					}
+				}
+				else{
+					p1=0;
+				}
+				if(d[i]==2){
+					p2++;
+					if(p2==4){ //cuatro fichas2 consecutivas horizontales
+						this.ganador = 2;
+						break;
+					}
+				}
+				else{
+					p2=0
+				}	
+		}
 	}
 };
 
