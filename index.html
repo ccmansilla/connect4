@@ -34,8 +34,10 @@ div.ficha2{
 var mini4 = {
 	filas : 6,
 	columnas : 7,
-	tablero : [],
-	jugador : 1,
+	tablero : [],  // tablero de juego contiene las fichas: 0=vacio, 1=ficha1, 2=ficha2
+	ganador : 0,   // 0=nohay, 1=jugador1, 2=jugador2
+	jugador : 1,   // jugador que tiene el turno de jugar: 1=jugador1, 2=jugador2
+
      
 	//crea el tablero vacio
 	inicio : function(){
@@ -82,9 +84,18 @@ var mini4 = {
 			    break;	
 			}
 		}
-		
-               	this.dibujar();			
-	        this.cambiarJugador();
+		this.hayGanador();
+               	this.dibujar();	
+		if(this.ganador == 0){		
+	        	this.cambiarJugador();
+		}
+		else if(this.ganador == 1){
+			alert('ganador jugador 1');
+		}
+		else{
+			alert('ganador jugador 2');
+		}
+			
 	},
 
 	cambiarJugador: function(){
@@ -101,6 +112,72 @@ var mini4 = {
 
 
                 div.innerHTML = "JUGADOR: <div 	style='width: 42px;height: 42px;' class='"+ficha+"'></div><br>";
+	},
+
+	hayGanador: function(){ //busca 4 fichas consecutivas en horizontal y vertical
+		var p1  = 0;
+		var p2  = 0;
+
+		this.ganador = 0;
+
+		//recorrido horizontal
+		for(var i=0; i<this.filas && this.ganador == 0; i++){
+			for(var j=0; j<this.columnas; j++){
+				if(this.tablero[i][j]==1){
+					p1++;
+					if(p1==4){ //cuatro fichas1 consecutivas horizontales
+						this.ganador = 1;
+						break;
+					}
+				}
+				else{
+					p1=0;
+				}
+				if(this.tablero[i][j]==2){
+					p2++;
+					if(p2==4){ //cuatro fichas2 consecutivas horizontales
+						this.ganador = 2;
+						break;
+					}
+				}
+				else{
+					p2=0
+				}
+			   
+			}
+		}
+		
+		p1  = 0;
+		p2  = 0;
+
+		//recorrido vertical
+		for(var j=0; j<this.columnas && this.ganador == 0; j++){
+			for(var i=0; i<this.filas; i++){
+				if(this.tablero[i][j]==1){
+					p1++;
+					if(p1==4){ //cuatro fichas1 consecutivas verticales
+						this.ganador = 1;
+						break;
+					}
+				}
+				else{
+					p1=0;
+				}
+				if(this.tablero[i][j]==2){
+					p2++;
+					if(p2==4){ //cuatro fichas2 consecutivas verticales
+						this.ganador = 2;
+						break;
+					}
+				}
+				else{
+					p2=0
+				}
+			   
+			}
+		}
+		
+		//recorrido diagonal
 	}
 };
 
