@@ -39,6 +39,7 @@ var mini4 = {
   
 	//crea el tablero vacio
 	inicio : function(){
+		this.ganador = 0;
 		this.tablero = new Array(this.filas-1); //arreglo de 0-5
 		for(var i=0; i<this.filas; i++){
 			this.tablero[i] = new Array(this.columnas-1); //arreglo de 0-6
@@ -88,10 +89,20 @@ var mini4 = {
 	        	this.cambiarJugador();
 		}
 		else if(this.ganador == 1){
-			alert('ganador jugador azul');
+			if(confirm(' ganador jugador azul\n ¿desea jugar otra partida?')){
+				this.inicio();
+			}
+			else{
+				document.write(' Ganador Jugador Azul\n Gracias por jugar Connect4..');
+			}
 		}
-		else{
-			alert('ganador jugador rojo');
+		else if(this.ganador == 2){
+			if(confirm(' ganador jugador rojo\n ¿desea jugar otra partida?')){
+				this.inicio();
+			}
+			else{
+				document.write(' Ganador Jugador Rojo\n Gracias por jugar Connect4..');				
+			}
 		}
 			
 	},
@@ -171,7 +182,7 @@ var mini4 = {
 		//son 6 diagonales a la derecha
 		var d1 = [this.tablero[2][0],this.tablero[3][1],this.tablero[4][2],this.tablero[5][3]];
 		var d2 = [this.tablero[1][0],this.tablero[2][1],this.tablero[3][2],this.tablero[4][3],this.tablero[5][4]];
-		var d3 = [this.tablero[0][0],this.tablero[1][1],this.tablero[2][2],this.tablero[3][3],this.tablero[5][5]];
+		var d3 = [this.tablero[0][0],this.tablero[1][1],this.tablero[2][2],this.tablero[3][3],this.tablero[4][4],this.tablero[5][5]];
 		var d4 = [this.tablero[0][1],this.tablero[1][2],this.tablero[2][3],this.tablero[3][4],this.tablero[4][5],this.tablero[5][6]];
 		var d5 = [this.tablero[0][2],this.tablero[1][3],this.tablero[2][4],this.tablero[3][5],this.tablero[4][6]];
 		var d6 = [this.tablero[0][3],this.tablero[1][4],this.tablero[2][5],this.tablero[3][6]];
@@ -201,7 +212,7 @@ var mini4 = {
 		var p1  = 0;
 		var p2  = 0;
 		var longitud = d.length;	
-		for(var i= 0; i<longitud; i++){
+		for(var i= 0; i<=longitud; i++){
 				if(d[i]==1){
 					p1++;
 					if(p1==4){ //cuatro fichas1 consecutivas horizontales
@@ -226,14 +237,10 @@ var mini4 = {
 	}
 };
 
-function reset(){
-	mini4.inicio();
-}
 </script>
 </head>
-<body onload='reset()'>
+<body onload='mini4.inicio();'>
 <h1>Connect4</h1>
-<input type='button' onclick='reset()' value='reset'>
 <hr/>
 <div id = 'jugador'></div>
 <div id = 'tablero' class='tablero'></div>
