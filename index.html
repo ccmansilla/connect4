@@ -123,6 +123,8 @@ var mini4 = {
 		
 		//recorrido horizontal
 		for(var i=0; i<this.filas && this.ganador == 0; i++){
+			p1 = 0;
+			p2 = 0;
 			for(var j=0; j<this.columnas; j++){
 				if(this.tablero[i][j]==1){
 					p1++;
@@ -147,10 +149,10 @@ var mini4 = {
 			}
 		}
 		
-		p1  = 0;
-		p2  = 0;
 		//recorrido vertical
 		for(var j=0; j<this.columnas && this.ganador == 0; j++){
+			p1  = 0;
+			p2  = 0;
 			for(var i=0; i<this.filas; i++){
 				if(this.tablero[i][j]==1){
 					p1++;
