@@ -52,7 +52,7 @@ var mini4 = {
 			for(var columna=0; columna<this.columnas; columna++){
 				this.tablero[fila][columna] = 0; //contenido: 0=vacio
 				id = fila +"-"+columna;
-				html+= "<div onclick = 'mini4.ponerFicha("+columna+")' id = '"+id+"'></div>";
+				html+= "<div onclick = 'mini4.ponerFicha("+columna+")' id = '"+id+"'>"+id+"</div>";
 			}
 			html+= "</div>"
 		}
