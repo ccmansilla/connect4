@@ -71,35 +71,63 @@ var mini4 = {
 	},
 
 	ponerFicha : function(columna){
-		for(var i=0; i<this.filas; i++){
-			if ((this.tablero[i][columna])=== 0){
-			    this.tablero[i][columna]= this.jugador;
-			    id = i * 10 + columna;
-                            var div = document.getElementById(id);
-			    if(this.jugador == 1){
-			    	div.style.backgroundColor = 'blue';//ficha azul
-			    }
-			    else{
-			    	div.style.backgroundColor = 'red';//ficha roja
-                            }	 			
-			    break;	
+		if(this.columnaCompleta(columna)){
+			alert('Columna completa elija otra');
+		}
+		else{
+			for(var i=0; i<this.filas; i++){
+				if ((this.tablero[i][columna])=== 0){
+				    this.tablero[i][columna]= this.jugador;
+				    id = i * 10 + columna;
+		                    var div = document.getElementById(id);
+				    if(this.jugador == 1){
+				    	div.style.backgroundColor = 'blue';//ficha azul
+				    }
+				    else{
+				    	div.style.backgroundColor = 'red';//ficha roja
+		                    }	 			
+				    break;	
+				}
 			}
-		}
-		this.hayGanador();
-		if(this.ganador == 0){		
-	        	this.cambiarJugador();
-		}
-		else if(this.ganador == 1){			
-			if(confirm('Ganador Jugador Azul\n¿Desea jugar otra partida?')){
-				this.inicio();
+			this.hayGanador();
+			if(this.ganador == 0){	
+				if(this.empate()){	
+					if(confirm('Empate\n¿Desea jugar otra partida?')){
+						this.inicio();
+					}
+				}
+				else{
+					this.cambiarJugador();	
+				}
 			}
-		}
-		else if(this.ganador == 2){
-			if(confirm('Ganador Jugador Rojo\n¿Desea jugar otra partida?')){
-				this.inicio();
+			else if(this.ganador == 1){			
+				if(confirm('Ganador Jugador Azul\n¿Desea jugar otra partida?')){
+					this.inicio();
+				}
+			}
+			else if(this.ganador == 2){
+				if(confirm('Ganador Jugador Rojo\n¿Desea jugar otra partida?')){
+					this.inicio();
+				}
 			}
 		}
 			
+	},
+
+	columnaCompleta: function(columna){
+		return (this.tablero[this.filas-1][columna]!== 0);
+	},
+
+	empate: function(){
+		var completo = true;
+                var i = 0;
+                while((i<=this.columnas-1)&&(completo)){
+			if(!this.columnaCompleta(i)){	
+                        	completo = false;
+			}
+		        i++;
+		}
+		return completo;
 	},
 
 	cambiarJugador: function(){
@@ -160,8 +188,7 @@ var mini4 = {
 						this.ganador = 1;
 						break;
 					}
-				}
-				else{
+				}else{
 					p1=0;
 				}
 				if(this.tablero[i][j]==2){
