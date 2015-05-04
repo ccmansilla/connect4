@@ -37,27 +37,22 @@ var mini4 = {
 	ganador  : 0,   // 0=no hay, 1=jugador azul, 2=jugador rojo
 	jugador  : 1,   // jugador que tiene el turno de jugar: 1=jugador azul, 2=jugador rojo
   
-	//crea el tablero vacio
+	//crea el tablero vacio y lo dibuja
 	inicio : function(){
 		this.ganador = 0;
 		this.tablero = new Array(this.filas-1); //arreglo de 0-5
-		for(var i=0; i<this.filas; i++){
-			this.tablero[i] = new Array(this.columnas-1); //arreglo de 0-6
-			for(var j=0; j<this.columnas; j++){
-				this.tablero[i][j] = 0; //contenido: 0=vacio
-			}
-		}
 		
-		//dibuja el tablero invertido
+		//para dibujar el tablero invertido
 		var div = document.getElementById('tablero');
 		var html = "";
-		var id = 0;	
-		for(var i = this.filas-1; i>=0; i--){
+		var id = "";	
+		for(var fila=0; fila<this.filas; fila++){
 			html += "<div>";
-			for(var j = this.columnas-1; j>=0; j--){
-				var contenido = this.tablero[i][j];
-				id = i *10 +j;
-				html+= "<div onclick = 'mini4.ponerFicha("+j+")' id = '"+id+"'></div>";
+			this.tablero[fila] = new Array(this.columnas-1); //arreglo de 0-6
+			for(var columna=0; columna<this.columnas; columna++){
+				this.tablero[fila][columna] = 0; //contenido: 0=vacio
+				id = fila +"-"+columna;
+				html+= "<div onclick = 'mini4.ponerFicha("+columna+")' id = '"+id+"'></div>";
 			}
 			html+= "</div>"
 		}
@@ -75,23 +70,23 @@ var mini4 = {
 			alert('Columna completa elija otra');
 		}
 		else{
-			for(var i=0; i<this.filas; i++){
-				if ((this.tablero[i][columna])=== 0){
-				    this.tablero[i][columna]= this.jugador;
-				    id = i * 10 + columna;
+			for(var fila=this.filas-1; fila>=0; fila--){
+				if ((this.tablero[fila][columna])=== 0){
+				    this.tablero[fila][columna]= this.jugador;
+				    id = fila +"-"+columna;
 		                    var div = document.getElementById(id);
 				    if(this.jugador == 1){
-				    	div.style.backgroundColor = 'blue';//ficha azul
+				    	div.style.backgroundColor = 'blue';//pone ficha azul
 				    }
 				    else{
-				    	div.style.backgroundColor = 'red';//ficha roja
-		                    }	 			
+				    	div.style.backgroundColor = 'red';//pone ficha roja
+		                    }	
+				    this.hayGanador(fila,columna); 			
 				    break;	
 				}
 			}
-			this.hayGanador();
 			if(this.ganador == 0){	
-				if(this.empate()){	
+				if(this.hayEmpate()){	
 					if(confirm('Empate\n¿Desea jugar otra partida?')){
 						this.inicio();
 					}
@@ -115,10 +110,10 @@ var mini4 = {
 	},
 
 	columnaCompleta: function(columna){
-		return (this.tablero[this.filas-1][columna]!== 0);
+		return (this.tablero[0][columna]!== 0);
 	},
 
-	empate: function(){
+	hayEmpate: function(){
 		var completo = true;
                 var i = 0;
                 while((i<=this.columnas-1)&&(completo)){
@@ -144,120 +139,63 @@ var mini4 = {
 		div.style.backgroundColor = color;
 	},
 
-	hayGanador: function(){ //busca 4 fichas consecutivas en horizontal y vertical
-		var p1  = 0;
-		var p2  = 0;
+	hayGanador: function(fila,columna){ //busca 4 fichas consecutivas en horizontal y vertical
+		var fichas1  = 0;
+		var fichas2  = 0;
 		this.ganador = 0;
 		
-		//recorrido horizontal
-		for(var i=0; i<this.filas && this.ganador == 0; i++){
-			p1 = 0;
-			p2 = 0;
-			for(var j=0; j<this.columnas; j++){
-				if(this.tablero[i][j]==1){
-					p1++;
-					if(p1==4){ //cuatro fichas azules consecutivas horizontales
-						this.ganador = 1;
-						break;
-					}
+		//chequeo horizontal
+		for(var j=0; j<this.columnas; j++){
+			if(this.tablero[fila][j]==1){
+				fichas1++;
+				if(fichas1==4){ //cuatro fichas azules consecutivas horizontales
+					this.ganador = 1;
+					break;
 				}
-				else{
-					p1=0;
-				}
-				if(this.tablero[i][j]==2){
-					p2++;
-					if(p2==4){ //cuatro fichas rojas consecutivas horizontales
-						this.ganador = 2;
-						break;
-					}
-				}
-				else{
-					p2=0;
-				}   
 			}
+			else{
+				fichas1=0;
+			}
+			if(this.tablero[fila][j]==2){
+				fichas2++;
+				if(fichas2==4){ //cuatro fichas rojas consecutivas horizontales
+					this.ganador = 2;
+					break;
+				}
+			}
+			else{
+				fichas2=0;
+			}   
+		}
+
+		fichas1=0;
+		fichas2=0;
+
+		//chequeo vertical
+		for(var i=0; i<this.filas; i++){
+			if(this.tablero[i][columna]==1){
+				fichas1++;
+				if(fichas1==4){ //cuatro fichas azules consecutivas verticales
+					this.ganador = 1;
+					break;
+				}
+			}
+			else{
+				fichas1=0;
+			}
+			if(this.tablero[i][columna]==2){
+				fichas2++;
+				if(fichas2==4){ //cuatro fichas rojas consecutivas verticales
+					this.ganador = 2;
+					break;
+				}
+			}
+			else{
+				fichas2=0;
+			}  
 		}
 		
-		//recorrido vertical
-		for(var j=0; j<this.columnas && this.ganador == 0; j++){
-			p1  = 0;
-			p2  = 0;
-			for(var i=0; i<this.filas; i++){
-				if(this.tablero[i][j]==1){
-					p1++;
-					if(p1==4){ //cuatro fichas azules consecutivas verticales
-						this.ganador = 1;
-						break;
-					}
-				}else{
-					p1=0;
-				}
-				if(this.tablero[i][j]==2){
-					p2++;
-					if(p2==4){ //cuatro fichas rojas consecutivas verticales
-						this.ganador = 2;
-						break;
-					}
-				}
-				else{
-					p2=0;
-				}  
-			}
-		}		
-		//son 6 diagonales a la derecha
-		var d1 = [this.tablero[2][0],this.tablero[3][1],this.tablero[4][2],this.tablero[5][3]];
-		var d2 = [this.tablero[1][0],this.tablero[2][1],this.tablero[3][2],this.tablero[4][3],this.tablero[5][4]];
-		var d3 = [this.tablero[0][0],this.tablero[1][1],this.tablero[2][2],this.tablero[3][3],this.tablero[4][4],this.tablero[5][5]];
-		var d4 = [this.tablero[0][1],this.tablero[1][2],this.tablero[2][3],this.tablero[3][4],this.tablero[4][5],this.tablero[5][6]];
-		var d5 = [this.tablero[0][2],this.tablero[1][3],this.tablero[2][4],this.tablero[3][5],this.tablero[4][6]];
-		var d6 = [this.tablero[0][3],this.tablero[1][4],this.tablero[2][5],this.tablero[3][6]];
-		//son 6 diagonales a la izquierda
-		var i1 = [this.tablero[0][3],this.tablero[1][2],this.tablero[2][1],this.tablero[3][0]];
-		var i2 = [this.tablero[0][4],this.tablero[1][3],this.tablero[2][2],this.tablero[3][1],this.tablero[2][0]];
-		var i3 = [this.tablero[0][5],this.tablero[1][4],this.tablero[2][3],this.tablero[3][2],this.tablero[4][1],this.tablero[5][0]];
-		var i4 = [this.tablero[0][6],this.tablero[1][5],this.tablero[2][4],this.tablero[3][3],this.tablero[4][2],this.tablero[5][1]];
-		var i5 = [this.tablero[1][6],this.tablero[2][5],this.tablero[3][4],this.tablero[4][3],this.tablero[5][4]];
-		var i6 = [this.tablero[2][6],this.tablero[3][5],this.tablero[4][4],this.tablero[5][3]];
-        
-		if(this.ganador==0){ this.buscarGanadorDiagonal(d1) };
-		if(this.ganador==0){ this.buscarGanadorDiagonal(d2) };
-		if(this.ganador==0){ this.buscarGanadorDiagonal(d3) };
-		if(this.ganador==0){ this.buscarGanadorDiagonal(d4) };
-		if(this.ganador==0){ this.buscarGanadorDiagonal(d5) };
-		if(this.ganador==0){ this.buscarGanadorDiagonal(d6) };
 		
-		if(this.ganador==0){ this.buscarGanadorDiagonal(i1) };
-		if(this.ganador==0){ this.buscarGanadorDiagonal(i2) };
-		if(this.ganador==0){ this.buscarGanadorDiagonal(i3) };
-		if(this.ganador==0){ this.buscarGanadorDiagonal(i4) };
-		if(this.ganador==0){ this.buscarGanadorDiagonal(i5) };
-		if(this.ganador==0){ this.buscarGanadorDiagonal(i6) };
-	},
-	buscarGanadorDiagonal: function(d){
-		var p1  = 0;
-		var p2  = 0;
-		var longitud = d.length;	
-		for(var i= 0; i<=longitud; i++){
-				if(d[i]==1){
-					p1++;
-					if(p1==4){ //cuatro fichas azules consecutivas diagonal
-						this.ganador = 1;
-						break;
-					}
-				}
-				else{
-					p1=0;
-				}
-				if(d[i]==2){
-					p2++;
-					if(p2==4){ //cuatro fichas rojas consecutivas diagonal
-						this.ganador = 2;
-						break;
-					}
-				}
-				else{
-					p2=0;
-				}	
-		}
 	}
 };
 </script>
