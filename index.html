@@ -44,19 +44,20 @@ var mini4 = {
 		
 		//para dibujar el tablero invertido
 		var div = document.getElementById('tablero');
-		var html = "";
+		var html_tablero = "";
 		var id = "";	
 		for(var fila=0; fila<this.filas; fila++){
-			html += "<div>";
+			html_tablero += "<div>";
 			this.tablero[fila] = new Array(this.columnas-1); //arreglo de 0-6
 			for(var columna=0; columna<this.columnas; columna++){
 				this.tablero[fila][columna] = 0; //contenido: 0=vacio
 				id = fila +"-"+columna;
-				html+= "<div onclick = 'mini4.ponerFicha("+columna+")' id = '"+id+"'>"+id+"</div>";
+				html_tablero+= "<div onclick = 'mini4.ponerFicha("+columna+")' id = '"+id+"'>"+id+"</div>";
 			}
-			html+= "</div>"
+			html_tablero+= "</div>"
 		}
-		div.innerHTML = html;
+		div.innerHTML = html_tablero;
+                
 
 		//dibuja color jugador
 		var div = document.getElementById('jugador');
@@ -104,7 +105,7 @@ var mini4 = {
 					this.inicio();
 				}
 			}
-		}
+		}	
 	},
 
 	columnaCompleta: function(columna){
@@ -192,8 +193,86 @@ var mini4 = {
 				fichas2=0;
 			}  
 		}
-		
-		
+
+		//chequeo diagonal izquierda son 6 diagonales selecciono fila+columna
+		var diagonal = null;
+
+		if(this.ganador==0){
+		switch (fila+columna) {
+		    case 3:
+		       diagonal=[this.tablero[0][3],this.tablero[1][2],this.tablero[2][1],this.tablero[3][0]];
+		       break;
+		    case 4:
+		       diagonal=[this.tablero[0][4],this.tablero[1][3],this.tablero[2][2],this.tablero[3][1],this.tablero[2][0]];
+		       break;
+		    case 5:
+		    diagonal=[this.tablero[0][5],this.tablero[1][4],this.tablero[2][3],this.tablero[3][2],this.tablero[4][1],this.tablero[5][0]];
+		       break;
+		    case 6:
+		    diagonal=[this.tablero[0][6],this.tablero[1][5],this.tablero[2][4],this.tablero[3][3],this.tablero[4][2],this.tablero[5][1]];
+		       break;
+		    case 7:
+		    diagonal=[this.tablero[1][6],this.tablero[2][5],this.tablero[3][4],this.tablero[4][3],this.tablero[5][4]];
+		       break;
+		    case 8:
+		    diagonal=[this.tablero[2][6],this.tablero[3][5],this.tablero[4][4],this.tablero[5][3]];
+		       break;
+		} 
+		if(diagonal!==null){this.buscarDiagonal(diagonal);}
+		}
+
+		//chequeo diagonal derecha son 6 diagonales selecciono fila-columna
+		if(this.ganador==0){
+		switch (fila-columna) {
+		    case -3:
+		       diagonal=[this.tablero[0][3],this.tablero[1][4],this.tablero[2][5],this.tablero[3][6]];
+		       break;
+		    case -2:
+		       diagonal=[this.tablero[0][2],this.tablero[1][3],this.tablero[2][4],this.tablero[3][5],this.tablero[4][6]];
+		       break;
+		    case -1:
+		    diagonal=[this.tablero[0][1],this.tablero[1][2],this.tablero[2][3],this.tablero[3][4],this.tablero[4][5],this.tablero[5][6]];
+		       break;
+		    case 0:
+		    diagonal=[this.tablero[0][0],this.tablero[1][1],this.tablero[2][2],this.tablero[3][3],this.tablero[4][4],this.tablero[5][5]];
+		       break;
+		    case 1:
+		    diagonal=[this.tablero[1][0],this.tablero[2][1],this.tablero[3][2],this.tablero[4][3],this.tablero[5][4]];
+		       break;
+		    case 2:
+		    diagonal=[this.tablero[2][0],this.tablero[3][1],this.tablero[4][2],this.tablero[5][3]];
+		       break;
+		} 
+		if(diagonal!==null){this.buscarDiagonal(diagonal);} 
+		}
+	},
+
+	buscarDiagonal: function(diagonal){
+		var fichas1  = 0;
+		var fichas2  = 0;
+		var longitud = diagonal.length;	
+		for(var i= 0; i<=longitud; i++){
+				if(diagonal[i]==1){
+					fichas1++;
+					if(fichas1==4){ //cuatro fichas azules consecutivas diagonal
+						this.ganador = 1;
+						break;
+					}
+				}
+				else{
+					fichas1=0;
+				}
+				if(diagonal[i]==2){
+					fichas2++;
+					if(fichas2==4){ //cuatro fichas rojas consecutivas diagonal
+						this.ganador = 2;
+						break;
+					}
+				}
+				else{
+					fichas2=0;
+				}	
+		}
 	}
 };
 </script>
