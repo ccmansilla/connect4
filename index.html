@@ -4,7 +4,7 @@
 <meta charset="utf-8" /> 
 <title>Connect4</title>
 <style>
-/* vista del juego connect4 css */
+/* vista del juego connect4 columnass */
 #tablero{
 	display: table;
 	background-color: silver;
@@ -46,13 +46,13 @@ var mini4 = {
 		var div = document.getElementById('tablero');
 		var html_tablero = "";
 		var id = "";	
-		for(var fila=0; fila<this.filas; fila++){
+		for(var f=0; f<this.filas; f++){
 			html_tablero += "<div>";
-			this.tablero[fila] = new Array(this.columnas-1); //arreglo de 0-6
-			for(var columna=0; columna<this.columnas; columna++){
-				this.tablero[fila][columna] = 0; //contenido: 0=vacio
-				id = fila +"-"+columna;
-				html_tablero+= "<div onclick = 'mini4.ponerFicha("+columna+")' id = '"+id+"'>"+id+"</div>";
+			this.tablero[f] = new Array(this.columnas-1); //arreglo de 0-6
+			for(var c=0; c<this.columnas; c++){
+				this.tablero[f][c] = 0; //contenido: 0=vacio
+				id = f +"-"+c;
+				html_tablero+= "<div onclick = 'mini4.ponerFicha("+c+")' id = '"+id+"'>"+id+"</div>";
 			}
 			html_tablero+= "</div>"
 		}
@@ -65,15 +65,15 @@ var mini4 = {
 		this.jugador = 1;
 	},
 
-	ponerFicha : function(columna){
-		if(this.columnaCompleta(columna)){
+	ponerFicha : function(c){
+		if(this.columnaCompleta(c)){
 			alert('Columna completa elija otra');
 		}
 		else{
-			for(var fila=this.filas-1; fila>=0; fila--){
-				if ((this.tablero[fila][columna])=== 0){
-				    this.tablero[fila][columna]= this.jugador;
-				    id = fila +"-"+columna;
+			for(var f=this.filas-1; f>=0; f--){
+				if ((this.tablero[f][c])=== 0){
+				    this.tablero[f][c]= this.jugador;
+				    id = f +"-"+c;
 		                    var div = document.getElementById(id);
 				    if(this.jugador == 1){
 				    	div.style.backgroundColor = 'blue';//pone ficha azul
@@ -81,7 +81,7 @@ var mini4 = {
 				    else{
 				    	div.style.backgroundColor = 'red';//pone ficha roja
 		                    }	
-				    this.hayGanador(fila,columna); 			
+				    this.hayGanador(f,c); 			
 				    break;	
 				}
 			}
@@ -108,8 +108,8 @@ var mini4 = {
 		}	
 	},
 
-	columnaCompleta: function(columna){
-		return (this.tablero[0][columna]!== 0);
+	columnaCompleta: function(c){
+		return (this.tablero[0][c]!== 0);
 	},
 
 	hayEmpate: function(){
@@ -138,123 +138,85 @@ var mini4 = {
 		div.style.backgroundColor = color;
 	},
 
-	hayGanador: function(fila,columna){ //busca 4 fichas consecutivas en horizontal y vertical
-		var fichas1  = 0;
-		var fichas2  = 0;
-		this.ganador = 0;
-		
-		//chequeo horizontal
-		for(var j=0; j<this.columnas; j++){
-			if(this.tablero[fila][j]==1){
-				fichas1++;
-				if(fichas1==4){ //cuatro fichas azules consecutivas horizontales
-					this.ganador = 1;
-					break;
-				}
-			}
-			else{
-				fichas1=0;
-			}
-			if(this.tablero[fila][j]==2){
-				fichas2++;
-				if(fichas2==4){ //cuatro fichas rojas consecutivas horizontales
-					this.ganador = 2;
-					break;
-				}
-			}
-			else{
-				fichas2=0;
-			}   
-		}
+	hayGanador: function(f,c){ //busca 4 fichas consecutivas en horizontal y vertical
 
-		fichas1=0;
-		fichas2=0;
+		var muestra = null;
+
+		//chequeo horizontal
+		if(this.ganador==0){
+     		muestra=[this.tablero[f][0],this.tablero[f][1],this.tablero[f][2],this.tablero[f][3],this.tablero[f][4],this.tablero[f][5], this.tablero[f][6]];		
+		this.contarFichas(muestra);
+		}
 
 		//chequeo vertical
-		for(var i=0; i<this.filas; i++){
-			if(this.tablero[i][columna]==1){
-				fichas1++;
-				if(fichas1==4){ //cuatro fichas azules consecutivas verticales
-					this.ganador = 1;
-					break;
-				}
-			}
-			else{
-				fichas1=0;
-			}
-			if(this.tablero[i][columna]==2){
-				fichas2++;
-				if(fichas2==4){ //cuatro fichas rojas consecutivas verticales
-					this.ganador = 2;
-					break;
-				}
-			}
-			else{
-				fichas2=0;
-			}  
-		}
-
-		//chequeo diagonal izquierda son 6 diagonales selecciono fila+columna
-		var diagonal = null;
-
 		if(this.ganador==0){
-		switch (fila+columna) {
+		muestra=[this.tablero[0][c],this.tablero[1][c],this.tablero[2][c],this.tablero[3][c],this.tablero[4][c],this.tablero[5][c]];
+			this.contarFichas(muestra);
+		}
+		
+		//chequeo diagonal la selecciono con f+c
+		if(this.ganador==0){
+		switch (f+c) {
 		    case 3:
-		       diagonal=[this.tablero[0][3],this.tablero[1][2],this.tablero[2][1],this.tablero[3][0]];
+		       muestra=[this.tablero[0][3],this.tablero[1][2],this.tablero[2][1],this.tablero[3][0]];
 		       break;
 		    case 4:
-		       diagonal=[this.tablero[0][4],this.tablero[1][3],this.tablero[2][2],this.tablero[3][1],this.tablero[2][0]];
+		       muestra=[this.tablero[0][4],this.tablero[1][3],this.tablero[2][2],this.tablero[3][1],this.tablero[2][0]];
 		       break;
 		    case 5:
-		    diagonal=[this.tablero[0][5],this.tablero[1][4],this.tablero[2][3],this.tablero[3][2],this.tablero[4][1],this.tablero[5][0]];
+		    muestra=[this.tablero[0][5],this.tablero[1][4],this.tablero[2][3],this.tablero[3][2],this.tablero[4][1],this.tablero[5][0]];
 		       break;
 		    case 6:
-		    diagonal=[this.tablero[0][6],this.tablero[1][5],this.tablero[2][4],this.tablero[3][3],this.tablero[4][2],this.tablero[5][1]];
+		    muestra=[this.tablero[0][6],this.tablero[1][5],this.tablero[2][4],this.tablero[3][3],this.tablero[4][2],this.tablero[5][1]];
 		       break;
 		    case 7:
-		    diagonal=[this.tablero[1][6],this.tablero[2][5],this.tablero[3][4],this.tablero[4][3],this.tablero[5][4]];
+		    muestra=[this.tablero[1][6],this.tablero[2][5],this.tablero[3][4],this.tablero[4][3],this.tablero[5][4]];
 		       break;
 		    case 8:
-		    diagonal=[this.tablero[2][6],this.tablero[3][5],this.tablero[4][4],this.tablero[5][3]];
+		    muestra=[this.tablero[2][6],this.tablero[3][5],this.tablero[4][4],this.tablero[5][3]];
 		       break;
+		    default:
+		    muestra=null;
 		} 
-		if(diagonal!==null){this.buscarDiagonal(diagonal);}
+		if(muestra!==null){this.contarFichas(muestra);}
 		}
 
-		//chequeo diagonal derecha son 6 diagonales selecciono fila-columna
+		//chequeo diagonal la selecciono f-c
 		if(this.ganador==0){
-		switch (fila-columna) {
+		switch (f-c) {
 		    case -3:
-		       diagonal=[this.tablero[0][3],this.tablero[1][4],this.tablero[2][5],this.tablero[3][6]];
+		       muestra=[this.tablero[0][3],this.tablero[1][4],this.tablero[2][5],this.tablero[3][6]];
 		       break;
 		    case -2:
-		       diagonal=[this.tablero[0][2],this.tablero[1][3],this.tablero[2][4],this.tablero[3][5],this.tablero[4][6]];
+		       muestra=[this.tablero[0][2],this.tablero[1][3],this.tablero[2][4],this.tablero[3][5],this.tablero[4][6]];
 		       break;
 		    case -1:
-		    diagonal=[this.tablero[0][1],this.tablero[1][2],this.tablero[2][3],this.tablero[3][4],this.tablero[4][5],this.tablero[5][6]];
+		    muestra=[this.tablero[0][1],this.tablero[1][2],this.tablero[2][3],this.tablero[3][4],this.tablero[4][5],this.tablero[5][6]];
 		       break;
 		    case 0:
-		    diagonal=[this.tablero[0][0],this.tablero[1][1],this.tablero[2][2],this.tablero[3][3],this.tablero[4][4],this.tablero[5][5]];
+		    muestra=[this.tablero[0][0],this.tablero[1][1],this.tablero[2][2],this.tablero[3][3],this.tablero[4][4],this.tablero[5][5]];
 		       break;
 		    case 1:
-		    diagonal=[this.tablero[1][0],this.tablero[2][1],this.tablero[3][2],this.tablero[4][3],this.tablero[5][4]];
+		    muestra=[this.tablero[1][0],this.tablero[2][1],this.tablero[3][2],this.tablero[4][3],this.tablero[5][4]];
 		       break;
 		    case 2:
-		    diagonal=[this.tablero[2][0],this.tablero[3][1],this.tablero[4][2],this.tablero[5][3]];
+		    muestra=[this.tablero[2][0],this.tablero[3][1],this.tablero[4][2],this.tablero[5][3]];
 		       break;
+		    default:
+		    muestra=null;
 		} 
-		if(diagonal!==null){this.buscarDiagonal(diagonal);} 
+		if(muestra!==null){this.contarFichas(muestra);} 
 		}
 	},
 
-	buscarDiagonal: function(diagonal){
+	contarFichas: function(muestra){
 		var fichas1  = 0;
 		var fichas2  = 0;
-		var longitud = diagonal.length;	
+		var longitud = muestra.length;	
 		for(var i= 0; i<=longitud; i++){
-				if(diagonal[i]==1){
+				if(muestra[i]==1){
 					fichas1++;
-					if(fichas1==4){ //cuatro fichas azules consecutivas diagonal
+					if(fichas1==4){ //cuatro fichas 1 (azules) consecutivas
 						this.ganador = 1;
 						break;
 					}
@@ -262,9 +224,9 @@ var mini4 = {
 				else{
 					fichas1=0;
 				}
-				if(diagonal[i]==2){
+				if(muestra[i]==2){
 					fichas2++;
-					if(fichas2==4){ //cuatro fichas rojas consecutivas diagonal
+					if(fichas2==4){ //cuatro fichas 2 (rojas) consecutivas
 						this.ganador = 2;
 						break;
 					}
