@@ -4,19 +4,19 @@ import com.unrc.app.User;
 import org.javalite.activejdbc.Base;
 
 /**
- * Hello world!
+ * Connect4
  *
  */
-public class App
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+public class App{
 
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/connect4_development", "franco", "franco");
+    public static void main( String[] args ){
+
+        System.out.println( "Connect4" );
+
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/connect4_development", "usuario", "usuario");
 
         User u = new User();
-        u.set("first_name", "Ariel");
+        u.set("name", "Mariano");
         u.save();
 
 

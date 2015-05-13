@@ -1,0 +1,264 @@
+<html>
+<head>
+<meta charset="utf-8" /> 
+<title>Connect4</title>
+<style>
+#tablero{
+	display: table;
+	background-color: silver;
+	border-collapse: collapse;
+}
+#tablero div{
+	display: table-row;
+}
+#tablero div div{
+	display: table-cell;
+	width:  60px;
+	height: 60px;
+	border: 2px black solid;
+}
+div#jugador{
+	width: 100px;
+	margin-bottom: 10px;
+	padding: 10px;
+	font-weight: bold;
+	border: 2px black solid;
+	color: white;
+}
+article{
+	width: 500px;
+	float: left;
+}
+aside pre{
+	font-family: serif;
+}
+</style>
+<script>
+var mini4 = {
+	filas    : 6,
+	columnas : 7,
+	tablero  : [],  // tablero de juego contiene celdas en: 0=vacio, 1=jugador_azul, 2=jugador_rojo
+	ganador  : 0,   // 0=no_hay, 1=jugador_azul, 2=jugador_rojo
+	jugador_actual: 1,   // jugador que tiene el turno de jugar: 1=jugador_azul, 2=jugador_rojo
+	puntaje  : 0,   // puntaje es igual a la cantidad de jugadas
+  
+	//crea el tablero vacio y lo dibuja
+	inicio : function(){
+		this.ganador = 0;
+		this.puntaje = 0;
+		this.tablero = new Array(this.filas-1); //arreglo de 0-5
+		
+		//para dibujar el tablero 
+		var div = document.getElementById('tablero');
+		var html_tablero = "";
+		var id = "";	
+		for(var f=0; f<this.filas; f++){
+			html_tablero += "<div>";
+			this.tablero[f] = new Array(this.columnas-1); //arreglo de 0-6
+			for(var c=0; c<this.columnas; c++){
+				this.tablero[f][c] = 0; //contenido: 0=vacio
+				id = f +"-"+c;
+				html_tablero+= "<div onclick = 'mini4.poner("+c+")' id = '"+id+"'>"+id+"</div>";
+			}
+			html_tablero+= "</div>"
+		}
+		div.innerHTML = html_tablero;
+                
+
+		//dibuja color jugador
+		var div = document.getElementById('jugador');
+		div.style.backgroundColor = "blue";
+		this.jugador_actual = 1;
+	},
+
+	poner : function(c){ //pone el jugador con turno en la columna c 
+		if(this.columnaCompleta(c)){//no lugar en la columna
+			alert('Columna completa elija otra');
+		}
+		else{
+			for(var f=this.filas-1; f>=0; f--){
+				if ((this.tablero[f][c])=== 0){
+				    this.tablero[f][c]= this.jugador_actual;
+				    id = f +"-"+c;
+		                    var div = document.getElementById(id);
+				    if(this.jugador_actual == 1){
+				    	div.style.backgroundColor = 'blue';//pone jugador azul
+				    }
+				    else{
+				    	div.style.backgroundColor = 'red';//pone jugador roja
+		                    }
+				    this.puntaje++;	
+				    this.chequeoGanador(f,c); 			
+				    break;	
+				}
+			}
+			if(this.ganador == 0){	//no hay ganador
+				if(this.tableroCompleto()){//hay empate	
+					if(confirm('Empate\n¿Desea jugar otra partida?')){
+						this.inicio();
+					}
+				}
+				else{
+					this.cambiarJugador();	
+				}
+			}
+			else if(this.ganador == 1){//gana jugador azul			
+				if(confirm('Ganador Jugador Azul Puntuacion:'+this.puntaje+'\n¿Desea jugar otra partida?')){
+					this.inicio();
+				}
+			}
+			else if(this.ganador == 2){//gana jugador rojo
+				if(confirm('Ganador Jugador Rojo Puntuacion:'+this.puntaje+'\n¿Desea jugar otra partida?')){
+					this.inicio();
+				}
+			}
+		}	
+	},
+
+	columnaCompleta: function(c){
+		return (this.tablero[0][c]!== 0);
+	},
+
+	tableroCompleto: function(){
+		var completo = true;
+                var i = 0;
+                while((i<=this.columnas-1)&&(completo)){
+			if(!this.columnaCompleta(i)){	
+                        	completo = false;
+			}
+		        i++;
+		}
+		return completo;
+	},
+
+	cambiarJugador: function(){
+		var color = "";
+		if(this.jugador_actual == 1){
+			this.jugador_actual = 2;
+			color="red";
+		}
+		else{
+			this.jugador_actual = 1;
+			color="blue";
+		}
+        	var div = document.getElementById('jugador');
+		div.style.backgroundColor = color;
+	},
+
+	chequeoGanador: function(f,c){ //busca 4 jugadores iguales consecutivos en horizontal y vertical
+
+		var muestra = null;
+
+		//chequeo horizontal
+		if(this.ganador==0){
+     		muestra=[this.tablero[f][0],this.tablero[f][1],this.tablero[f][2],this.tablero[f][3],this.tablero[f][4],this.tablero[f][5], this.tablero[f][6]];		
+		this.contar(muestra);
+		}
+
+		//chequeo vertical
+		if(this.ganador==0){
+		muestra=[this.tablero[0][c],this.tablero[1][c],this.tablero[2][c],this.tablero[3][c],this.tablero[4][c],this.tablero[5][c]];
+			this.contar(muestra);
+		}
+		
+		//chequeo diagonal izquierda la selecciono con f+c
+		if(this.ganador==0){
+		switch (f+c) {
+		    case 3:
+		       muestra=[this.tablero[0][3],this.tablero[1][2],this.tablero[2][1],this.tablero[3][0]];
+		       break;
+		    case 4:
+		       muestra=[this.tablero[0][4],this.tablero[1][3],this.tablero[2][2],this.tablero[3][1],this.tablero[2][0]];
+		       break;
+		    case 5:
+		    muestra=[this.tablero[0][5],this.tablero[1][4],this.tablero[2][3],this.tablero[3][2],this.tablero[4][1],this.tablero[5][0]];
+		       break;
+		    case 6:
+		    muestra=[this.tablero[0][6],this.tablero[1][5],this.tablero[2][4],this.tablero[3][3],this.tablero[4][2],this.tablero[5][1]];
+		       break;
+		    case 7:
+		    muestra=[this.tablero[1][6],this.tablero[2][5],this.tablero[3][4],this.tablero[4][3],this.tablero[5][2]];
+		       break;
+		    case 8:
+		    muestra=[this.tablero[2][6],this.tablero[3][5],this.tablero[4][4],this.tablero[5][3]];
+		       break;
+		    default:
+		    muestra=null;
+		} 
+		if(muestra!==null){this.contar(muestra);}
+		}
+
+		//chequeo diagonal derecha la selecciono f-c
+		if(this.ganador==0){
+		switch (f-c) {
+		    case -3:
+		       muestra=[this.tablero[0][3],this.tablero[1][4],this.tablero[2][5],this.tablero[3][6]];
+		       break;
+		    case -2:
+		       muestra=[this.tablero[0][2],this.tablero[1][3],this.tablero[2][4],this.tablero[3][5],this.tablero[4][6]];
+		       break;
+		    case -1:
+		    muestra=[this.tablero[0][1],this.tablero[1][2],this.tablero[2][3],this.tablero[3][4],this.tablero[4][5],this.tablero[5][6]];
+		       break;
+		    case 0:
+		    muestra=[this.tablero[0][0],this.tablero[1][1],this.tablero[2][2],this.tablero[3][3],this.tablero[4][4],this.tablero[5][5]];
+		       break;
+		    case 1:
+		    muestra=[this.tablero[1][0],this.tablero[2][1],this.tablero[3][2],this.tablero[4][3],this.tablero[5][4]];
+		       break;
+		    case 2:
+		    muestra=[this.tablero[2][0],this.tablero[3][1],this.tablero[4][2],this.tablero[5][3]];
+		       break;
+		    default:
+		    muestra=null;
+		} 
+		if(muestra!==null){this.contar(muestra);} 
+		}
+	},
+
+	contar: function(muestra){
+		var cuenta = 0;
+		var longitud = muestra.length;	
+		for(var i= 0; i<=longitud; i++){
+				if(muestra[i] == this.jugador_actual){
+					cuenta++;
+					if(cuenta==4){ //cuatro jugador iguales consecutivos
+						this.ganador = this.jugador_actual;
+						break;
+					}
+				}
+				else{
+					cuenta = 0;
+				}
+		}
+	}
+};
+</script>
+</head>
+<body onload='mini4.inicio();'>
+<header><h1>CONNECT4</h1></header>
+<article>
+<section>
+	<div id = 'jugador'>JUGADOR</div>
+	<div id = 'tablero'></div>
+</section>
+</article>
+<aside>
+<pre>
+Reglas de Juego
+
+Elementos:
+.Un tablero
+.21 fichas jugador azul y 21 fichas jugador rojo
+
+Desarrollo:
+.Cada jugador elige un color
+.Comienza el jugador azul poniendo una ficha en la columna elegida
+.Luego lo hace el otro jugador y asi sucesivamente
+.El primero que haya conseguido tener 4 fichas alineadas del mismo color,
+ en forma horizontal, vertical o diagonal es el ganador de la partida
+</pre>
+</aside>
+<footer></footer>
+</body>
+</html>
