@@ -16,7 +16,8 @@ public class App{
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/connect4_development", "usuario", "usuario");
 
         User u = new User();
-        u.set("name", "Mariano");
+        u.set("name", "usuario");
+        u.set("pass", "1234");
         u.save();
 
 

@@ -35,8 +35,7 @@ aside pre{
 </style>
 <script>
 var mini4 = {
-	filas    : 6,
-	columnas : 7,
+	filas    : 6, columnas : 7,
 	tablero  : [],  // tablero de juego contiene celdas en: 0=vacio, 1=jugador_azul, 2=jugador_rojo
 	ganador  : 0,   // 0=no_hay, 1=jugador_azul, 2=jugador_rojo
 	jugador_actual: 1,   // jugador que tiene el turno de jugar: 1=jugador_azul, 2=jugador_rojo
@@ -92,7 +91,7 @@ var mini4 = {
 				    break;	
 				}
 			}
-			if(this.ganador == 0){	//no hay ganador
+			if(this.ganador === 0){	//no hay ganador
 				if(this.tableroCompleto()){//hay empate	
 					if(confirm('Empate\n¿Desea jugar otra partida?')){
 						this.inicio();
@@ -133,7 +132,7 @@ var mini4 = {
 
 	cambiarJugador: function(){
 		var color = "";
-		if(this.jugador_actual == 1){
+		if(this.jugador_actual === 1){
 			this.jugador_actual = 2;
 			color="red";
 		}
@@ -150,19 +149,19 @@ var mini4 = {
 		var muestra = null;
 
 		//chequeo horizontal
-		if(this.ganador==0){
+		if(this.ganador===0){
      		muestra=[this.tablero[f][0],this.tablero[f][1],this.tablero[f][2],this.tablero[f][3],this.tablero[f][4],this.tablero[f][5], this.tablero[f][6]];		
 		this.contar(muestra);
 		}
 
 		//chequeo vertical
-		if(this.ganador==0){
+		if(this.ganador===0){
 		muestra=[this.tablero[0][c],this.tablero[1][c],this.tablero[2][c],this.tablero[3][c],this.tablero[4][c],this.tablero[5][c]];
 			this.contar(muestra);
 		}
 		
 		//chequeo diagonal izquierda la selecciono con f+c
-		if(this.ganador==0){
+		if(this.ganador===0){
 		switch (f+c) {
 		    case 3:
 		       muestra=[this.tablero[0][3],this.tablero[1][2],this.tablero[2][1],this.tablero[3][0]];
@@ -189,7 +188,7 @@ var mini4 = {
 		}
 
 		//chequeo diagonal derecha la selecciono f-c
-		if(this.ganador==0){
+		if(this.ganador===0){
 		switch (f-c) {
 		    case -3:
 		       muestra=[this.tablero[0][3],this.tablero[1][4],this.tablero[2][5],this.tablero[3][6]];
@@ -220,7 +219,7 @@ var mini4 = {
 		var cuenta = 0;
 		var longitud = muestra.length;	
 		for(var i= 0; i<=longitud; i++){
-				if(muestra[i] == this.jugador_actual){
+				if(muestra[i] === this.jugador_actual){
 					cuenta++;
 					if(cuenta==4){ //cuatro jugador iguales consecutivos
 						this.ganador = this.jugador_actual;
