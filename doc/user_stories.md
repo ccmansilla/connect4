@@ -16,7 +16,7 @@
 
 #Diagrama de Clases
 
-    ![imagen](class_diagram.png)
+![diagrama](class_diagram.png "diagrama de clases connect4")
 
 #Herramientas
 

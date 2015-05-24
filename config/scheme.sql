@@ -24,8 +24,6 @@ DROP TABLE IF EXISTS grids;
 
 CREATE TABLE grids(
     id INT(11) NOT NULL AUTO_INCREMENT,
-    rows INT(11) NOT NULL,
-    columns INT(11) NOT NULL,
   CONSTRAINT grids_pk PRIMARY KEY (id)
 );
 
@@ -47,6 +45,6 @@ CREATE TABLE cells(
     x INT(11) NOT NULL,
     y INT(11) NOT NULL,
     state INT(11) NOT NULL,
-    grid_id INT(11) NOT NULL,
+    grid_id INT(11),
   CONSTRAINT cells_pk PRIMARY KEY (id)
 );

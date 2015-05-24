@@ -1,6 +1,5 @@
 package com.unrc.app;
 
-import com.unrc.app.User;
 import org.javalite.activejdbc.Base;
 
 /**
@@ -15,11 +14,17 @@ public class App{
 
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/connect4_development", "usuario", "usuario");
 
-        User u = new User();
-        u.set("name", "usuario");
-        u.set("pass", "1234");
-        u.save();
+        User p1 = new User();
+        p1.set("name", "usuario1");
+        p1.set("pass", "1234");
+        p1.save();
 
+        User p2 = new User();
+        p2.set("name", "usuario2");
+        p2.set("pass", "2222");
+        p2.save();
+
+        Game game = new Game(p1,p2);
 
         Base.close();
     }
