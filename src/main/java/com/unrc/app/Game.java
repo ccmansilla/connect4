@@ -1,17 +1,74 @@
 package com.unrc.app;
 
-public class Game{
+import org.javalite.activejdbc.Model;
 
-  //atributos de Game
-  private Grid grid = null; // cada celda del matrix contiene uno de los valores: NONE, PLAYER_1, PLAYER_2
-  private User player1 = null;
-  private User player2 = null;
+public class Game  extends Model{
 
-  public Game(User player1, User player2){
-    this.player1 = player1;
-    this.player2 = player2;
-    this.grid = new Grid();
-    this.grid.add(player1);
-    this.grid.add(player2);
+  private Grid last_grid;
+  private User player1;
+  private User player2;
+  private User turn;
+  private User winner;
+
+  public Game(User p1, User p2){
+    super();
+    this.save();
+    this.add(p1);
+    this.add(p2);
+    this.player1=p1;
+    this.player2=p2;
+    this.start();
   }
+
+  private void start(){
+    this.last_grid = new Grid(this);
+    this.turn=this.player1;
+    this.push(3);
+    this.push(3);
+    this.draw();
+  }
+
+  private void toogleTurn(){
+    if(this.turn==this.player1){
+      this.turn = this.player2;
+    }
+    else{
+      this.turn = this.player1;
+    }
+  }
+
+  private void push(int c){
+    if(this.last_grid.push(c,this.turn)){
+      this.toogleTurn();
+      //puso el jugador y cambia el turno
+    }
+    else{
+      //no se puede poner mas en esta columna
+    }
+  }
+
+  private void draw(){
+    Cell matrix[][] = this.last_grid.getMatrix();
+    String tablero = "---------------\n";
+    for(int r=0; r<Grid.ROWS; r++){
+			for(int c=0; c<Grid.COLUMNS; c++){
+        Cell cell = matrix[r][c];
+        if(cell == null){
+          tablero+= "| ";
+        }
+        else{
+          Integer id = (cell.parent(User.class)).getInteger("id");
+          if(id == this.player1.getInteger("id")){
+            tablero+= "|O";
+          }
+          else{
+            tablero+= "|X";
+          }
+        }
+			}
+			tablero+= "|\n---------------\n";
+		}
+		System.out.println(tablero);
+  }
+
 }

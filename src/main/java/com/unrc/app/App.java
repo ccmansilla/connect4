@@ -16,7 +16,7 @@ public class App{
 
         User p1 = new User();
         p1.set("name", "usuario1");
-        p1.set("pass", "1234");
+        p1.set("pass", "1111");
         p1.save();
 
         User p2 = new User();
